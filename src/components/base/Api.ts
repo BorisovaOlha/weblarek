@@ -1,4 +1,9 @@
 type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
+import { IApi } from '../../types/index';
+import { IProduct } from '../../types/index';
+import { IOrderRequest } from '../../types/index';
+import { IOrderResponse } from '../../types/index';
+import { IErrorResponse } from '../../types/index';
 
 export class Api {
     readonly baseUrl: string;
@@ -33,5 +38,21 @@ export class Api {
             method,
             body: JSON.stringify(data)
         }).then(this.handleResponse<T>);
+    }
+}
+
+export class WebLarekApi {  
+    private localApi: IApi;
+
+    constructor (localApi: IApi) {
+        this.localApi = localApi;
+    }
+
+    getData(): Promise<IProduct[]> {
+        return this.localApi.get('/product/');
+    }
+
+    postData(order: IOrderRequest): Promise<IOrderResponse | IErrorResponse> {
+        return this.localApi.post('/order/', order);
     }
 }
