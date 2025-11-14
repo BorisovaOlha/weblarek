@@ -1,8 +1,8 @@
 import './scss/styles.scss';
 import { apiProducts } from './utils/data';
-import { Buyer } from './components/base/Models/Buyer';
-import { Basket } from './components/base/Models/Basket';
-import { Products } from './components/base/Models/Products';
+import { Buyer } from './components/Models/Buyer';
+import { Basket } from './components/Models/Basket';
+import { Products } from './components/Models/Products';
 import { IBuyer } from './types';
 import { Api, WebLarekApi } from './components/base/Api';
 import { API_URL } from './utils/constants';
@@ -24,10 +24,11 @@ const buyer1: IBuyer = {
 };
 
 const buyerModel = new Buyer();
-buyerModel.setData(buyer1);
+buyerModel.setData("email", buyer1.email);
+buyerModel.setData("phone", buyer1.phone);
 
 console.log("Данные покупателя: ", buyerModel.getData());
-console.log("Результат проверки данных покупателя: ", buyerModel.checkData(buyer1));
+console.log("Результат проверки данных покупателя: ", buyerModel.checkData());
 
 buyerModel.emptyData();
 console.log("Данные покупателя: ", buyerModel.getData());
@@ -52,14 +53,20 @@ console.log("Товары в корзине: ", basketModel.getBasketItems());
 const baseApi = new Api(API_URL);
 const localApi = new WebLarekApi(baseApi);
 
-try {
-  const productsModelApi = new Products();
-  productsModelApi.setItems(await localApi.getData());
-  console.log("Каталог товаров: ", productsModelApi.getItems());
+async function getProducts() {
+  try {
+    const productsModelApi = new Products();
+    const products = await localApi.getData();
+    productsModelApi.setItems(products);
 
-} catch (error) {
-  console.error("Ошибка при получении каталога товаров: ", error);
+    console.log("Каталог товаров: ", productsModelApi.getItems());
+  } catch (error) {
+    console.error("Ошибка при получении каталога товаров: ", error);
+  }  
 }
+
+getProducts();
+
 
 
 

@@ -1,8 +1,9 @@
-import { IProduct } from '../../../types/index';
+import { IProduct } from '../../types/index';
 
 export class Basket {
   private basketItems: IProduct[] = [];
-
+  
+  constructor() {}
 
   getBasketItems(): IProduct[] {
     return this.basketItems;
@@ -21,16 +22,14 @@ export class Basket {
   }
   
   getTotalPrice(): number {
-    const prices = this.basketItems.map(el => {
-      return el.price ?? 0;
-    });
-  
-    const totalPrice = prices.reduce((a, b) => 
-      a + b, 0
-    );
-  
-    return totalPrice;
-  
+
+    let totalPrice = 0;
+
+    this.basketItems.forEach(el => {
+      totalPrice += el.price ?? 0;
+    })
+
+    return totalPrice;  
   }
   
   getItemsTotal(): number {

@@ -1,9 +1,11 @@
-import { IProduct } from '../../../types/index';
+import { IProduct } from '../../types/index';
 
 
 export class Products {
   private items!: IProduct[];
   private selectedItem!: IProduct;
+
+  constructor() {}
 
   setItems(items: IProduct[]): void {
     this.items = items;
