@@ -6,6 +6,9 @@ import { Products } from './components/Models/Products';
 import { IBuyer } from './types';
 import { Api, WebLarekApi } from './components/base/Api';
 import { API_URL } from './utils/constants';
+import { cloneTemplate } from './utils/utils';
+import { EventEmitter, IEvents } from './components/base/Events';
+import { CardCatalog } from './components/views/CardCatalog';
 
 const productsModel = new Products();
 productsModel.setItems(apiProducts.items);
@@ -68,7 +71,21 @@ async function getProducts() {
 getProducts();
 
 
+// Тестирование слоя представления
 
+
+
+
+// const events: IEvents = new EventEmitter();
+
+// events.on('catalog:changed', () => {
+//   const itemCards = productsModel.getItems().map((item) => {
+//     const card = new CardCatalog(cloneTemplate(cardCatalogTemplate), {
+//       onClick: () => events.emit('card:select', item),
+//     });
+//     return card.render({ catalog: itemCards });
+//   })
+// });
 
 
 
