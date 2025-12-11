@@ -1,4 +1,5 @@
 import { IBuyer } from '../../types/index';
+import { IEvents } from '../base/Events';
 
 export class Buyer {
   private payment: "card" | "cash" | "" = "";
@@ -6,7 +7,7 @@ export class Buyer {
   private phone: string = "";
   private address: string = "";
 
-  constructor() {}
+  constructor(protected events: IEvents) {}
 
   setData(key: string, value: string): void {
     switch (key) {
@@ -24,7 +25,8 @@ export class Buyer {
         break;
       default:
         console.log("Couldn't save the data");
-    }    
+    }
+    this.events.emit('buyerData:changed', this.getData());   
   }
 
   getData(): IBuyer {
@@ -41,7 +43,17 @@ export class Buyer {
     this.email = "";
     this.phone = "";
     this.address = "";
+
+    this.events.emit('buyerData:changed', this.getData());
   }
+
+  
+/*  Как один из вариантов решения задачи валидации может быть метод, который вернет объект.
+В объекте могут присутствовать поля, соответствующие полям класса, значениями у которых будет текст ошибки.
+Если же поле не содержит ошибок, то такое свойство в объекте может отсутствовать.*/
+
+// Может, передавать в него сразу введенные пользователем данные?
+// Посмотреть, как работает в консоли, какой объект возвращает.
 
   checkData(): Partial<IBuyer> {
     const checkedData: Partial<IBuyer> = {};
@@ -62,7 +74,9 @@ export class Buyer {
       checkedData.address = 'Укажите адрес';
     }
 
-     return checkedData;
+    // Добавить событие?
+    
+    return checkedData;
     }  
 }
 

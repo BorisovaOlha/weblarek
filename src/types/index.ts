@@ -5,6 +5,11 @@ export interface IApi {
     post<T extends object>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
 }
 
+export interface IProductListResponse {
+  total: number;
+  items: IProduct[];
+}
+
 export interface IProduct {
   id: string;
   description: string;

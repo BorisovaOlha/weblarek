@@ -18,8 +18,8 @@ export class CardPreview extends Card<TCardPreview> {
 
       this.categoryElement = ensureElement<HTMLElement>('.card__category', this.container);
       this.imageElement = ensureElement<HTMLImageElement>('.card__image', this.container);
-      this.textElement = ensureElement<HTMLElement>('card__text', this.container);
-      this.cardButton = ensureElement<HTMLButtonElement>('', this.container);
+      this.textElement = ensureElement<HTMLElement>('.card__text', this.container);
+      this.cardButton = ensureElement<HTMLButtonElement>('.card__button', this.container);
 
       this.cardButton.addEventListener('click', () => {
         this.events.emit('cardButton:click');
@@ -43,5 +43,9 @@ export class CardPreview extends Card<TCardPreview> {
 
   set description(value: string) {
     this.textElement.textContent = String(value);
+  }
+
+  changeButton(inBasket: boolean) {
+    this.cardButton.textContent = inBasket ? 'Удалить из корзины' : 'В корзину';
   }
 }
