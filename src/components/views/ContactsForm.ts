@@ -28,4 +28,11 @@ export class ContactsForm extends Form<TContactsForm> {
         this.events.emit('order:pay');
     })
   }
+
+  reset() {
+    this.emailInput.value = '';    
+    this.phoneInput.value = '';   
+    this.error = '';
+    this.ready = false;
+  }
 }

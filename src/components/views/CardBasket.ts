@@ -1,8 +1,6 @@
 import { Card } from "./Card";
-import { IEvents } from "../base/Events";
 import { ensureElement } from "../../utils/utils";
-import { IProduct } from "../../types";
-import { ICardActions } from "./CardCatalog";
+import { IProduct, ICardActions } from "../../types";
 
 
 type TCardBasket = Partial<IProduct> & { index: number };
@@ -11,7 +9,6 @@ export class CardBasket extends Card<TCardBasket> {
 
   protected indexElement: HTMLElement;
   protected deleteButton: HTMLButtonElement;
-
 
   constructor(container: HTMLElement, actions?: ICardActions){
     super(container);
@@ -27,5 +24,4 @@ export class CardBasket extends Card<TCardBasket> {
   set index(value: number) {
     this.indexElement.textContent = String(value);
   }
-
 }

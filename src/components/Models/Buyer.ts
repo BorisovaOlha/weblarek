@@ -47,14 +47,6 @@ export class Buyer {
     this.events.emit('buyerData:changed', this.getData());
   }
 
-  
-/*  Как один из вариантов решения задачи валидации может быть метод, который вернет объект.
-В объекте могут присутствовать поля, соответствующие полям класса, значениями у которых будет текст ошибки.
-Если же поле не содержит ошибок, то такое свойство в объекте может отсутствовать.*/
-
-// Может, передавать в него сразу введенные пользователем данные?
-// Посмотреть, как работает в консоли, какой объект возвращает.
-
   checkData(): Partial<IBuyer> {
     const checkedData: Partial<IBuyer> = {};
 
@@ -63,7 +55,7 @@ export class Buyer {
     }
          
     if (this.email === undefined || this.email === null || this.email === "") {
-      checkedData.email = 'Укажите емэйл';
+      checkedData.email = 'Укажите email';
     }
          
     if (this.phone === undefined || this.phone === null || this.phone === "") {
@@ -73,9 +65,7 @@ export class Buyer {
     if (this.address === undefined || this.address === null || this.address === "") {
       checkedData.address = 'Укажите адрес';
     }
-
-    // Добавить событие?
-    
+        
     return checkedData;
     }  
 }

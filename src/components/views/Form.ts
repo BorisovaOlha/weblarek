@@ -13,13 +13,7 @@ export class Form<T> extends Component<T> {
 
     this.inputElements = ensureAllElements<HTMLInputElement>('.form__input', this.container);
     this.submitButton = ensureElement<HTMLButtonElement>("[type='submit']", this.container);
-    this.errorField = ensureElement<HTMLElement>('.form__errors', this.container);
-
-    // @TODO Нужно ли вообще это событие?
-    this.submitButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.events.emit('form:submit');
-    });
+    this.errorField = ensureElement<HTMLElement>('.form__errors', this.container);    
   }
 
   set error(errorMessage: string) {

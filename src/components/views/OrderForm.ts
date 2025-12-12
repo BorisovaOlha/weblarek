@@ -36,5 +36,12 @@ export class OrderForm extends Form<TOrderForm> {
       this.paymentButtons.forEach(button => {
         button.classList.toggle('button_alt-active', button.name === value);
       })
-    }    
+    }
+
+    reset() {
+      this.payment = '';      
+      this.addressInput.value = '';  
+      this.error = '';
+      this.ready = false;
+    }
 }

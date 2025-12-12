@@ -48,4 +48,9 @@ export class CardPreview extends Card<TCardPreview> {
   changeButton(inBasket: boolean) {
     this.cardButton.textContent = inBasket ? 'Удалить из корзины' : 'В корзину';
   }
+
+  disableButton(isDisabled: boolean) {
+    this.cardButton.disabled = isDisabled;
+    this.cardButton.textContent = 'Недоступно';
+  }
 }

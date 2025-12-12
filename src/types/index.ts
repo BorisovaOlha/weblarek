@@ -26,6 +26,10 @@ export interface IBuyer {
   address: string;
 }
 
+export interface ICardActions {
+  onClick: () => void;
+}
+
 export interface IOrderRequest extends IBuyer {    
   total: number,
   items: string[]

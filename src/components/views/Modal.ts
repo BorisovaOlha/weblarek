@@ -27,8 +27,6 @@ export class Modal extends Component<IModalData> {
     })
   }
 
-  // Или отдельно show и hide?
-
   showModal(isVisible: boolean) {
     this.container.classList.toggle('modal_active', isVisible);
   }
@@ -37,7 +35,3 @@ export class Modal extends Component<IModalData> {
     this.contentContainer.replaceChildren(modalContent);
   }
 }
-
-// в компоненте модального окна, для включения и выключения видимости модального
-// окна используется модификатор 'modal_active', который
-// добавляется элементу с классом "modal"
