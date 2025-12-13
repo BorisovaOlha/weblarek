@@ -50,7 +50,7 @@ export class CardPreview extends Card<TCardPreview> {
   }
 
   disableButton(isDisabled: boolean) {
-    this.cardButton.disabled = isDisabled;
-    this.cardButton.textContent = 'Недоступно';
+    this.cardButton.disabled = isDisabled;    
+    this.cardButton.textContent = isDisabled ? 'Недоступно' : 'В корзину';
   }
 }

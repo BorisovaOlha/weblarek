@@ -21,7 +21,7 @@ export class Basket {
   }
   
   emptyBasket(): void {
-    this.basketItems.length = 0;
+    this.basketItems = [];
     this.events.emit('basket:changed', this.getBasketItems());
   }
   

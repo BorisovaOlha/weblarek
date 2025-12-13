@@ -19,7 +19,7 @@ export class Form<T> extends Component<T> {
   set error(errorMessage: string) {
     this.errorField.textContent = errorMessage;
   }
-    // Когда форма готова к отправке: текст в инпутах становятся белыми, кнопка Далее и Оформить теряют disabled
+  
   set ready(isReady: boolean) {
     this.submitButton.disabled = !isReady;
   }

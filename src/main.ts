@@ -3,7 +3,8 @@ import { Buyer } from './components/Models/Buyer';
 import { Basket } from './components/Models/Basket';
 import { Products } from './components/Models/Products';
 import { IProduct, IOrderRequest } from './types';
-import { Api, WebLarekApi } from './components/base/Api';
+import { Api } from './components/base/Api';
+import { WebLarekApi } from './components/WebLarekApi';
 import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate } from './utils/utils';
 import { EventEmitter, IEvents } from './components/base/Events';
@@ -29,8 +30,8 @@ const basket = new BasketView(events, cloneTemplate('#basket'));
 const orderForm = new OrderForm(events, cloneTemplate('#order'));
 const contactsForm = new ContactsForm(events, cloneTemplate('#contacts'));
 const buyer = new Buyer(events);
-
-
+const success = new OrderSuccess(events, cloneTemplate('#success'));
+const cardPreviewCurrent = new CardPreview(events, cloneTemplate('#card-preview'));
 
 const baseApi = new Api(API_URL);
 const localApi = new WebLarekApi(baseApi);
@@ -65,12 +66,12 @@ events.on('product:selected', (product: IProduct) => {
   productsModel.setItem(product);
 });
 
-let cardPreviewCurrent: CardPreview;
 events.on('selectedProduct:changed', (product: IProduct) => {  
-  cardPreviewCurrent = new CardPreview(events, cloneTemplate('#card-preview'));
-  cardPreviewCurrent.changeButton(basketModel.checkItemById(product.id));
   if (!product.price) {
     cardPreviewCurrent.disableButton(true);
+  } else {
+    cardPreviewCurrent.disableButton(false);
+    cardPreviewCurrent.changeButton(basketModel.checkItemById(product.id));
   }
   modal.content = cardPreviewCurrent.render(product);
   modal.showModal(true);
@@ -124,8 +125,18 @@ events.on('basket:open', () => {
 });
 
 // Обработка нажатия на кнопку "Оформить" в корзине с товарами
-events.on('basketButton:clicked', () => {  
-  modal.content = orderForm.render();
+events.on('basketButton:clicked', () => {
+  const errors = buyer.checkData();
+  const buyerData = buyer.getData();
+
+  modal.content = orderForm.render({
+    address: buyerData.address,
+    payment: buyerData.payment,
+    ready: !errors.payment && !errors.address,
+    error: [errors.payment, errors.address]
+      .filter(str => str !== undefined && str !== "")
+      .join('. ')
+  })
 });
 
 // Обработка событий в формах
@@ -138,7 +149,6 @@ events.on('address:input', ({ key, value }: { key: string, value: string }) => {
 });
 
 events.on('order:continue', () => {
-  contactsForm.error = "";
   modal.content = contactsForm.render();
 });
 
@@ -152,33 +162,32 @@ events.on('phone:input', ({ key, value }: { key: string, value: string }) => {
 
 // Обработка изменений в данных покупателя
 events.on('buyerData:changed', () => {
+  const buyerData = buyer.getData();
   const errors = buyer.checkData();
-  orderForm.payment = buyer.getData().payment;  
 
-  if (errors.address) {
-    orderForm.error = errors.address as string;
-  } else if (errors.payment) {
-    orderForm.error = errors.payment as string;
-  } else {
-    orderForm.error = "";
-  }
+  orderForm.render({
+    address: buyerData.address,
+    payment: buyerData.payment,
+    ready: !errors.payment && !errors.address,
+    error: [errors.payment, errors.address]
+      .filter(str => str !== undefined && str !== "")
+      .join('. ')
+  })
 
-  if (errors.email) {
-    contactsForm.error = errors.email as string;
-  } else if (errors.phone) {
-    contactsForm.error = errors.phone as string;
-  } else {
-    contactsForm.error = "";
-  }
-
-  orderForm.ready = !errors.payment && !errors.address;
-  contactsForm.ready = !errors.email && !errors.phone;
+  contactsForm.render({
+    email: buyerData.email,
+    phone: buyerData.phone,
+    ready: !errors.email && !errors.phone,
+    error: [errors.email, errors.phone]
+      .filter(str => str !== undefined && str !== "")
+      .join('. ')
+  })  
 });
 
 // Отправка данных на сервер и сообщение об успешной оплате
 events.on('order:pay', () => {
   async function postOrder() {
-  try {    
+  try {
     const buyerData = buyer.getData();
     const purchaseData = basketModel.getBasketItems().map(item => {
       return item.id;
@@ -186,14 +195,11 @@ events.on('order:pay', () => {
     const totalPrice = basketModel.getTotalPrice();
     const orderData: IOrderRequest = Object.assign({}, {...buyerData, items: purchaseData, total: totalPrice});
     const postResponse = await localApi.postData(orderData);
-    const success = new OrderSuccess(events, cloneTemplate('#success'));
     if ('total' in postResponse) {
       success.sum = postResponse.total;
       modal.content = success.render();
       basketModel.emptyBasket();
       buyer.emptyData();
-      orderForm.reset();
-      contactsForm.reset();
     } else {
       console.error('Ошибка заказа: ', postResponse.error);
     }        

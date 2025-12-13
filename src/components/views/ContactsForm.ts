@@ -3,7 +3,10 @@ import { IEvents } from "../base/Events";
 import { Form } from "./Form";
 import { IBuyer } from "../../types";
 
-type TContactsForm = Pick<IBuyer, 'email' | 'phone'>;
+export type TContactsForm = Pick<IBuyer, 'email' | 'phone'> & {
+  ready: boolean;
+  error: string;
+};
 
 export class ContactsForm extends Form<TContactsForm> {
   protected emailInput: HTMLInputElement;
@@ -29,10 +32,11 @@ export class ContactsForm extends Form<TContactsForm> {
     })
   }
 
-  reset() {
-    this.emailInput.value = '';    
-    this.phoneInput.value = '';   
-    this.error = '';
-    this.ready = false;
+  set email(value: string) {
+    this.emailInput.value = value;
+  }
+
+  set phone(value: string) {
+    this.phoneInput.value = value;
   }
 }

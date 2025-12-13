@@ -3,7 +3,10 @@ import { IEvents } from "../base/Events";
 import { IBuyer } from "../../types";
 import { Form } from "./Form";
 
-export type TOrderForm = Pick<IBuyer, 'payment'>
+export type TOrderForm = Pick<IBuyer, 'payment' | 'address'> & {
+  ready: boolean;
+  error: string;
+};
 
 export class OrderForm extends Form<TOrderForm> {
     protected paymentButtons: HTMLButtonElement[];
@@ -38,10 +41,7 @@ export class OrderForm extends Form<TOrderForm> {
       })
     }
 
-    reset() {
-      this.payment = '';      
-      this.addressInput.value = '';  
-      this.error = '';
-      this.ready = false;
+    set address(value: string) {
+      this.addressInput.value = value;
     }
 }
