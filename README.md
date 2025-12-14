@@ -136,7 +136,7 @@ interface IBuyer {
 `setItems(items: IProduct[]): void` - принимает в параметрах массив товаров, сохраняет его.
 `getItems(): IProduct[]` - возвращает массив товаров.
 `setItem(selectedItem: IProduct): void` - сохраняет товар, выбранный для подробного отображения.
-`getItem(): IProduct` - возвращает товар, выбранный для подробного отображения.
+`getSelectedItem(): IProduct` - возвращает товар, выбранный для подробного отображения.
 `getItemById(id: string): IProduct | undefined` - принимает в параметрах id товара и возвращает соответствующий товар.
 
 #### Класс Basket

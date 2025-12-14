@@ -10,7 +10,7 @@ export class Products {
 
   setItems(items: IProduct[]): void {
     this.items = items;
-    this.events.emit('catalog:changed'); // @TODO Нужен здесь this.items? или this.getItems()
+    this.events.emit('catalog:changed');
   }
 
   getItems(): IProduct[] {
@@ -19,10 +19,10 @@ export class Products {
 
   setItem(selectedItem: IProduct): void {
     this.selectedItem = selectedItem;
-    this.events.emit('selectedProduct:changed', this.getItem());
+    this.events.emit('selectedProduct:changed', this.getSelectedItem());
   }
   
-  getItem(): IProduct {
+  getSelectedItem(): IProduct {
     return this.selectedItem;
   }
 

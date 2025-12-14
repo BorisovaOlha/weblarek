@@ -84,7 +84,7 @@ events.on('modal:closed', () => {
 
 // Обработка нажатия на кнопку "В корзину" или "Удалить из корзины" в превью карточки
 events.on('cardButton:click', () => {
-  const selectedItem = productsModel.getItem();
+  const selectedItem = productsModel.getSelectedItem();
   if (!basketModel.checkItemById(selectedItem.id)) {
     basketModel.addItem(selectedItem);
   } else {
@@ -96,7 +96,7 @@ events.on('cardButton:click', () => {
 // Обработка изменений в данных корзины
 events.on('basket:changed', () => {
   // Обновление контента в отображаемом превью карточки
-  const product = productsModel.getItem();
+  const product = productsModel.getSelectedItem();
   header.counter = basketModel.getItemsTotal();
   cardPreviewCurrent.changeButton(basketModel.checkItemById(product.id));
   
